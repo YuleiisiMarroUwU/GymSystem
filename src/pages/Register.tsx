@@ -1,33 +1,35 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Importa Link
+import { useNavigate, Link } from "react-router-dom";
 
-export default function Login() {
+export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // Para manejar errores
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(""); // Limpia errores previos
 
     try {
-      const res = await fetch("http://localhost:4000/auth/login", {
+      const res = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) {
-        throw new Error(data.error || "Login failed");
+        // Si el backend envía un error (ej. email duplicado)
+        throw new Error(data.error || "Fallo al registrarse");
       }
-      
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        navigate("/dashboard");
-      }
+
+      // Si el registro es exitoso
+      console.log(data.message); // "User registered"
+      // Redirige al login para que inicie sesión
+      navigate("/login");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -37,17 +39,30 @@ export default function Login() {
   };
 
   return (
-    // Estilo actualizado para coincidir con la app de Gimnasio
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-4">
       <div className="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-blue-400 mb-6">
-          Iniciar Sesión
+          Crear Cuenta
         </h2>
         <p className="text-center text-slate-400 mb-6">
-          Diario de Gimnasio 🏋️‍♂️
+          Bienvenido al Diario de Gimnasio 🏋️‍♂️
         </p>
         
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form onSubmit={handleRegister} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1">
+              Nombre
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="Tu nombre"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
               Correo electrónico
@@ -85,18 +100,17 @@ export default function Login() {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Entrar
+            Registrarse
           </button>
         </form>
 
         <p className="mt-6 text-sm text-center text-slate-400">
-          ¿No tienes cuenta?{" "}
-          <Link to="/Register" className="text-blue-400 hover:underline">
-            Regístrate
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/login" className="text-blue-400 hover:underline">
+            Inicia sesión
           </Link>
         </p>
       </div>
     </div>
   );
 }
-

@@ -1,70 +1,47 @@
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register"; // Importa la página de Registro
+import Navbar from "./components/Navbar"; // Importa tu Navbar
 
-export default function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+// --- Componentes Placeholder (Temporales) ---
+// (Puedes moverlos a sus propios archivos en src/pages/ luego)
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Login:", { email, password });
-  };
-
+function Dashboard() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Panel izquierdo */}
-        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-blue-600 to-indigo-600 items-center justify-center p-10 text-white">
-          <div>
-            <h2 className="text-4xl font-bold mb-4">Bienvenido a TIRMEX</h2>
-            <p className="text-lg text-blue-100">
-              Optimiza tus cotizaciones y mejora la eficiencia del área de ventas.
-            </p>
-          </div>
-        </div>
-
-        {/* Panel derecho (Formulario) */}
-        <div className="w-full md:w-1/2 p-10">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            Iniciar sesión
-          </h2>
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Correo electrónico
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="usuario@empresa.com"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Entrar
-            </button>
-          </form>
-        </div>
+    <div className="bg-slate-900 min-h-screen text-white">
+      <Navbar />
+      <div className="p-4">
+        <h1 className="text-2xl">Bienvenido a tu Dashboard</h1>
+        {/* Aquí iría el resto de tu dashboard (rutinas, etc.) */}
       </div>
     </div>
   );
 }
+
+function CreateRoutine() {
+   return (
+    <div className="bg-slate-900 min-h-screen text-white">
+      <Navbar />
+      <div className="p-4">
+        <h1 className="text-2xl">Crear Nueva Rutina</h1>
+        {/* Aquí iría el formulario para crear rutinas */}
+      </div>
+    </div>
+  );
+}
+// --- Fin de Componentes Placeholder ---
+
+
+export default function App() {
+  return (
+    // Define todas las rutas de tu aplicación
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/create" element={<CreateRoutine />} />
+    </Routes>
+  );
+}
+
